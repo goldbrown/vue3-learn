@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <title>first vue3 page</title>
+        <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    </head>
+    <body>
+        <div id="app">
+            {{msg}}
+        </div>
+        <div id="app2">
+            <p v-text="name"></p>
+            学生： {{name}}
+            <hr>
+            <a v-bind:href="url" v-bind:class="clazz">vue网站</a>
+            <hr>
+            <input v-model="inputMessage" placeholder="please type some text">
+            <p>{{inputMessage}}</p>
+            <hr>
+            <ul>
+                <li v-for="(item, index) in fruits" v-bind:key="item.id" v-text="item.id + '  ' + item.name"></li>
+            </ul>
+            <hr>
+            <button v-on:click="calc">求和</button>
+            <p v-text="total"></p>
+            <hr>
+            <h4>人民币兑换港币</h4>
+            兑换率：<input type="text" v-model="rate"><br/>
+            人民币：<input type="text" v-model="money" v-on:blur="calMoney"><br/>
+            港币：<p>{{ex_money}}</p>
+            港币2：<p>{{ex_money2}}</p>
+            <hr>
+            <my-component></my-component>
+        </div>
+        <template id="tp_child">
+            <h1>MyComponent is a self-defined component</h1>
+        </template>
+    </body>
+    <script type="text/javascript">
+        const MyComponent = {
+                template: '#tp_child'
+        }
+        const RootComponent = {
+            data: function() {
+                return {
+                    msg: 'this is the first vue3 demo'
+                }
+            }
+            
+        }
+        const RootComponent2 = {
+            data: function() {
+                return {
+                    msg: 'this is the first vue3 demo2',
+                    name: 'chris',
+                    url: 'https://cn.vuejs.org/',
+                    clazz: 'gray',
+                    inputMessage: 'please type',
+                    fruits: [
+                        {
+                            id:1,
+                            name: 'apple'
+                        },
+                        {
+                            id:2,
+                            name: 'orange'
+                        },
+                        {
+                            id:3,
+                            name: 'banana'
+                        },
+                    ],
+                    total: 0,
+                    money: 0,
+                    rate: 0.878,
+                    ex_money2: ''
+            
+                }
+            },
+            components: {
+                'my-component': MyComponent
+            },
+
+            methods: {
+                calc: function(event) {
+                    this.total = this.total + 10;
+                    alert(event.target);
+                },
+                calMoney: function(event) {
+                    this.ex_money2 = this.money / this.rate;
+                }
+            },
+            computed: {
+                ex_money: function() {
+                    return this.money / this.rate;
+                }
+            },
+            watch: {
+                money: {
+                    handler: function(newValue ,oldValue) {
+                        console.log("money is changed, " + newValue);
+                    }
+                }
+            }
+        
+            
+        }
+        const vueApp = Vue.createApp(RootComponent);
+        const vueApp2 = Vue.createApp(RootComponent2);
+        const vm = vueApp.mount("#app");
+        vueApp2.mount("#app2");
+    </script>
+    <style>
+        .gray {
+            color: rgb(209, 206, 206)
+        }
+    </style>
+</html>
